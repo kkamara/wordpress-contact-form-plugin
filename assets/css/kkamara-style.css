@@ -1,0 +1,17 @@
+.kkamara-contact-form-description {
+    margin-top: 4px;
+}
+.kkamara-contact-form-description p:first-child {
+    margin: 0px;
+    color: #6e6363;
+}
+.kkamara-contact-highlight {
+    background-color: #2271b1;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    margin: 0px;
+    color: #fff;
+    font-family: monospace;
+    font-size: 12px;
+    margin-top: 3px;
+}
