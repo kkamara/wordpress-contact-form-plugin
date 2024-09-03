@@ -55,6 +55,12 @@ class KKamaraContactForm {
     public function editFormAfterTitle($post) {
         // Check if post type is kkamara_contact
         if ($post->post_type === "kkamara_contact") {
+            // Check if post has postmeta of contact id
+            $contact_id = get_post_meta(
+                $post->ID,
+                "contact-id",
+                true, 
+            );
             // ob start
             ob_start();
             // Include the file
