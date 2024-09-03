@@ -66,6 +66,30 @@ class KKamaraContactForm {
     }
 
     /**
+     * Check for generated_id
+     * @param int $post_id,
+     * @return boolean
+     */
+    public function checkGeneratedId($post_id) {
+        global $wpdb;
+        // Table
+        $table = $wpdb->prefix."kkamara_contacts";
+        // SQL
+        $sql = $wpdb->prepare(
+            "SELECT * FROM $table WHERE post_id = %d",
+            $post_id,
+        );
+        // Get results
+        $results = $wpdb->get_results($sql);
+        // Check if results
+        if ($results) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
      * adminEnqueueScripts
      */
     public function adminEnqueueScripts($hook) {
@@ -90,12 +114,10 @@ class KKamaraContactForm {
     public function editFormAfterTitle($post) {
         // Check if post type is kkamara_contact
         if ($post->post_type === "kkamara_contact") {
-            // Check if post has postmeta of contact id
-            $contact_id = get_post_meta(
-                $post->ID,
-                "contact-id",
-                true, 
-            );
+            // Check for checkGeneratedId
+            if (!$this->checkGeneratedId($post->ID)) {
+                return;
+            }
             // ob start
             ob_start();
             // Include the file
