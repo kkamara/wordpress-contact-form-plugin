@@ -5,7 +5,7 @@
  * Author:      Kelvin Kamara
  * Author URI:  https://www.kelvinkamara.com
  * Description: A simple contact form plugin for WordPress.
- * Version:     0.1.0
+ * Version:     1.0.0
  * License:     BSD-3-Clause
  * License URL: https://opensource.org/license/bsd-3-clause
  * text-domain: kkamara-contact
