@@ -33,6 +33,43 @@ class KKamaraContactForm {
             "init",
             array($this, "init"),
         );
+        // Save post action
+        add_action(
+            "save_post",
+            array($this, "savePostGeneratedId"),
+            10,
+            3,
+        );
+    }
+
+    /**
+     * savePostGeneratedId
+     */
+    public function savePostGeneratedId($post_id, $post, $update) {
+        // Check if post type is kkamara_contact
+        if ($post->post_type === "kkamara_contact") {
+            // Check for checkGeneratedId
+            if ($this->checkGeneratedId($post_id)) {
+                return;
+            }
+            // Generate ID
+            $generated_id = substr(
+                md5($post_id . time()),
+                0,
+                7,
+            );
+            // Table
+            global $wpdb;
+            $table = $wpdb->prefix . "kkamara_contacts";
+            // Insert
+            $wpdb->insert(
+                $table,
+                [
+                    "post_id" => $post_id,
+                    "generated_id" => $generated_id,
+                ]
+            );
+        }
     }
 
     /**
@@ -68,7 +105,7 @@ class KKamaraContactForm {
     /**
      * Check for generated_id
      * @param int $post_id,
-     * @return boolean
+     * @return mixed|bool
      */
     public function checkGeneratedId($post_id) {
         global $wpdb;
@@ -83,7 +120,7 @@ class KKamaraContactForm {
         $results = $wpdb->get_results($sql);
         // Check if results
         if ($results) {
-            return true;
+            return $results[0];
         }
         return false;
     }
@@ -115,7 +152,11 @@ class KKamaraContactForm {
         // Check if post type is kkamara_contact
         if ($post->post_type === "kkamara_contact") {
             // Check for checkGeneratedId
-            if (!$this->checkGeneratedId($post->ID)) {
+            $checkForId = $this->checkGeneratedId(
+                $post->ID
+            );
+            if (!$checkForId) {
+                // Do nothing
                 return;
             }
             // ob start

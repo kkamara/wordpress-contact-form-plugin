@@ -7,6 +7,6 @@ if (!defined("ABSPATH") || !defined("WPINC")) {
 <div class="kkamara-contact-form-description">
     <p>Copy this shortcode and paste it into your post, page, or text widget content:</p>
     <p class="kkamara-contact-highlight">
-        [contact-form-7 id="1f21fba" title="Contact form 1"]
+        [contact-form-7 id="<?php echo esc_html($checkForId->generated_id); ?>" title="<?php echo esc_html(get_post_field("post_title", $checkForId->post_id)); ?>"]
     </p>
 </div>
