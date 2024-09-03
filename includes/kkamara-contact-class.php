@@ -28,6 +28,41 @@ class KKamaraContactForm {
             "admin_enqueue_scripts",
             array($this, "adminEnqueueScripts"),
         );
+        // Init
+        add_action(
+            "init",
+            array($this, "init"),
+        );
+    }
+
+    /**
+     * Init
+     */
+    public function init() {
+        try {
+            global $wpdb;
+            // Table
+            $table = $wpdb->prefix . "kkamara_contacts";
+            // Check if table exists
+            if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) {
+                // SQL
+                $sql = "CREATE TABLE $table (
+                    id INT(11) NOT NULL AUTO_INCREMENT,
+                    post_id INT(11) NOT NULL,
+                    generated_id VARCHAR(100) NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (id)
+                )";
+                // Create table
+                require_once(ABSPATH . "wp-admin/includes/upgrade.php");
+                dbDelta($sql);
+            }
+        } catch (\Exception $e) {
+            error_log(
+                "KKamara contact error: " .
+                    $e->getMessage(),
+            );
+        }
     }
 
     /**
