@@ -247,6 +247,21 @@ class KKamaraContactForm {
                     [],
                     KKAMARA_CONTACT_PLUGIN_VERSION,
                 );
+                // JQuery UI kkamara CSS
+                wp_enqueue_style(
+                    "jquery-ui-kkamara",
+                    KKAMARA_CONTACT_PLUGIN_ASSETS_URL .
+                        "/css/jquery-ui.css",
+                );
+                // JQuery UI kkamara JS
+                wp_enqueue_script(
+                    "jquery-ui-kkamara",
+                    KKAMARA_CONTACT_PLUGIN_ASSETS_URL .
+                        "/js/jquery-ui.js",
+                    ["jquery"],
+                    KKAMARA_CONTACT_PLUGIN_VERSION,
+                    true,
+                );
             }
         }
     }
