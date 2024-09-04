@@ -40,6 +40,40 @@ class KKamaraContactForm {
             10,
             3,
         );
+        // Create shortcode
+        add_shortcode(
+            "kkamara-contact-form",
+            array($this, "kkamaraContactFormShortcode"),
+        );
+    }
+
+    /**
+     * kkamaraContactFormShortcode
+     */
+    public function kkamaraContactFormShortcode($atts) {
+        // Extract
+        extract(shortcode_atts(
+            [
+                "id" => "",
+                "title" => "",
+            ],
+            $atts,
+        ));
+        // Check for Id
+        if (!$id) {
+            // Do nothing
+            return;
+        }
+        // Check for title
+        if (!$title) {
+            $title = "KKamara Contact Form";
+        }
+        // Get the template
+        ob_start();
+        include_once KKAMARA_CONTACT_PLUGIN_DIR .
+            "/templates/kkamara-frontend-view.php";
+        $htmlView = ob_get_clean();
+        return $htmlView;
     }
 
     /**
