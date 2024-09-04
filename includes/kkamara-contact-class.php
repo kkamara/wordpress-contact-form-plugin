@@ -64,6 +64,25 @@ class KKamaraContactForm {
             10,
             2,
         );
+        // Add frontend assets
+        add_action(
+            "wp_enqueue_scripts",
+            array($this, "frontendAssetsScripts"),
+        );
+    }
+
+    /**
+     * frontendAssetsScripts
+     */
+    public function frontendAssetsScripts() {
+        // Add styles
+        wp_enqueue_style(
+            "kkamara-frontend-assets",
+            KKAMARA_CONTACT_PLUGIN_ASSETS_URL .
+                "/css/frontend-styles.css",
+            [],
+            KKAMARA_CONTACT_PLUGIN_VERSION,
+        );
     }
 
     /**
@@ -243,7 +262,7 @@ class KKamaraContactForm {
                 wp_enqueue_style(
                     "kkamara-contact-admin-style",
                     KKAMARA_CONTACT_PLUGIN_ASSETS_URL .
-                        "/css/kkamara-style.css",
+                        "/css/kkamara-styles.css",
                     [],
                     KKAMARA_CONTACT_PLUGIN_VERSION,
                 );
