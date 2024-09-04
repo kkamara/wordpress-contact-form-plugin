@@ -45,6 +45,56 @@ class KKamaraContactForm {
             "kkamara-contact-form",
             array($this, "kkamaraContactFormShortcode"),
         );
+        // Column table
+        add_filter(
+            "manage_kkamara_contact_posts_columns",
+            array($this, "addCustomColumns"),
+        );
+        // Column table content
+        add_action(
+            "manage_kkamara_contact_posts_custom_column",
+            array($this, "addCustomColumnsContent"),
+            10,
+            2,
+        );
+    }
+
+    /**
+     * addCustomColumns
+     */
+    public function addCustomColumns($columns) {
+        // Unset date
+        unset($columns["date"]);
+        // Add Shortcode
+        $columns["shortcode"] = "Shortcode";
+        // Add author
+        $columns["author"] = "Author";
+        // Add date to the be the last column
+        $columns["date"] = "Date";
+        // Return columns
+        return $columns;
+    }
+
+    /**
+     * addCustomColumnsContent
+     */
+    public function addCustomColumnsContent($column, $post_id) {
+        // Check for Shortcode
+        switch ($column) {
+            case "shortcode":
+                printf(
+                    '[kkamara-contact-form id="%s" title="%s"]',
+                    $post_id,
+                    get_the_title($post_id),
+                );
+                break;
+            case "author":
+                echo esc_html(get_the_author_meta(
+                    "display_name",
+                    get_post_field("post_author", $post_id),
+                ));
+                break;
+        }
     }
 
     /**
