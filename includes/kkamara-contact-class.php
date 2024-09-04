@@ -22,6 +22,13 @@ class KKamaraContactForm {
         add_action(
             "edit_form_after_title",
             array($this, "editFormAfterTitle"),
+            10,
+        );
+        // Add action edit_form_after_title for body
+        add_action(
+            "edit_form_after_title",
+            array($this, "editFormAfterTitleBody"),
+            11,
         );
         // Add admin script
         add_action(
@@ -57,6 +64,21 @@ class KKamaraContactForm {
             10,
             2,
         );
+    }
+
+    /**
+     * editFormAfterTitleBody
+     */
+    public function editFormAfterTitleBody($post) {
+        if ($post->post_type === "kkamara_contact") {
+            // ob start
+            ob_start();
+            // Include the file
+            include KKAMARA_CONTACT_PLUGIN_DIR .
+                "/templates/edit-form-after-title-body.php";
+            // Echo the output
+            echo ob_get_clean();
+        }
     }
 
     /**
