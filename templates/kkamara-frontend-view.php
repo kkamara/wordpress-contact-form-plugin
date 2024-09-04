@@ -26,42 +26,9 @@ if (!defined("ABSPATH") || !defined("WPINC")) {
                 value="<?php echo wp_create_nonce("kkamara-contact-message"); ?>"
             />
             <div class="kkamara-form-group">
-                <label for="name">Name</label>
-                <input
-                    type="text"
-                    name="name"
-                    id="kkamara_name"
-                    placeholder="Enter your name"
-                />
-            </div>
-            <div class="kkamara-form-group">
-                <label for="phone">Phone Number</label>
-                <input
-                    type="text"
-                    name="phone"
-                    id="kkamara_phone"
-                    placeholder="Enter your phone number"
-                />
-            </div>
-            <div class="kkamara-form-group">
-                <label for="email">Email</label>
-                <input
-                    type="text"
-                    name="email"
-                    id="kkamara_email"
-                    placeholder="Enter your email"
-                />
-            </div>
-            <div class="kkamara-form-group">
-                <label for="message">Message</label>
-                <textarea
-                    type="text"
-                    name="message"
-                    id="kkamara_email"
-                    cols="30"
-                    rows="10"
-                    placeholder="Enter your message"
-                ></textarea>
+                <button type="submit">
+                    Submit
+                </button>
             </div>
         </form>
     </div>

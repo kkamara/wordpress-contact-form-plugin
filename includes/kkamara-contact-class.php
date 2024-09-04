@@ -69,6 +69,96 @@ class KKamaraContactForm {
             "wp_enqueue_scripts",
             array($this, "frontendAssetsScripts"),
         );
+        // Add multiple shortcodes
+        $this->addMultipleShortcodes();
+    }
+
+    /**
+     * addMultipleShortcodes
+     */
+    public function addMultipleShortcodes() {
+        // Shortcodes
+        $shortcodes = [
+            "name" => "nameShortCode",
+            "phone" => "phoneShortCode",
+            "email" => "emailShortCode",
+            "message" => "messageShortCode",
+        ];
+        // Loop through Shortcodes
+        foreach ($shortcodes as $shortcode => $callback) {
+            // Add Shortcode
+            add_shortcode(
+                KKAMARA_CONTACT_PLUGIN_SHORT_CODE_PREFIX .
+                    $shortcode,
+                array($this, $callback),
+            );
+        }
+    }
+
+    public function nameShortCode($attr) {
+        ob_start();
+        ?>
+        <div class="kkamara-form-group">
+            <label for="name">Name</label>
+            <input
+                type="text"
+                name="name"
+                id="kkamara_name"
+                placeholder="Enter your name"
+            />
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+
+    public function phoneShortCode($attr) {
+        ob_start();
+        ?>
+        <div class="kkamara-form-group">
+            <label for="phone">Phone Number</label>
+            <input
+                type="text"
+                name="phone"
+                id="kkamara_phone"
+                placeholder="Enter your phone number"
+            />
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+
+    public function emailShortCode($attr) {
+        ob_start();
+        ?>
+        <div class="kkamara-form-group">
+            <label for="email">Email</label>
+            <input
+                type="text"
+                name="email"
+                id="kkamara_email"
+                placeholder="Enter your email"
+            />
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+
+    public function messageShortCode($attr) {
+        ob_start();
+        ?>
+        <div class="kkamara-form-group">
+            <label for="message">Message</label>
+            <textarea
+                type="text"
+                name="message"
+                id="kkamara_email"
+                cols="30"
+                rows="10"
+                placeholder="Enter your message"
+            ></textarea>
+        </div>
+        <?php
+        return ob_get_clean();
     }
 
     /**

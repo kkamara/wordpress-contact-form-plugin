@@ -35,6 +35,11 @@ define(
     "KKAMARA_CONTACT_PLUGIN_ASSETS_URL",
     KKAMARA_CONTACT_PLUGIN_URL . "/assets",
 );
+// Shortcode prefix
+define(
+    "KKAMARA_CONTACT_PLUGIN_SHORT_CODE_PREFIX",
+    "kkamara_contact_"
+);
 
 // Check if KKamaraContactForm exists
 if (!defined("KKamaraContactForm")) {
