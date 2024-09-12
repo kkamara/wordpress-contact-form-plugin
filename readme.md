@@ -22,7 +22,11 @@ A simple contact form plugin for WordPress.
 
 ## Installation
 
-* [XAMPP](https://www.apachefriends.org/download.html) (During installation choose MySQL & PHP).
+* PHP
+
+* MySQL
+
+* NginX or Apache.
 
 ## Usage
 
