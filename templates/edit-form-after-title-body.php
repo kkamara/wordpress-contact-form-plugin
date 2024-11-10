@@ -38,7 +38,7 @@ if (!defined("ABSPATH") || !defined("WPINC")) {
                     name="kkamara-form-content"
                     id="kkamara-form-content"
                     placeholder="Enter form content."
-                ></textarea>
+                ><?php echo esc_html(get_post_meta($post_id, "kkamara-form-content", true)); ?></textarea>
             </div>
         </div>
         <div id="tabs-mail">

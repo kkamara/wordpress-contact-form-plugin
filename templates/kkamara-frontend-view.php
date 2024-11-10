@@ -3,6 +3,9 @@
 if (!defined("ABSPATH") || !defined("WPINC")) {
     exit("Do not access this file directly.");
 }
+
+// Get contact body for $post_id
+$contact_body = get_post_meta($post_id, "kkamara-form-content", true);
 ?>
 <div class="kkamara-contact-form-frontend">
     <div class="kkamara-contact-header">

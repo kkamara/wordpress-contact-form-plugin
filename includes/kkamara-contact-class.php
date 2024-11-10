@@ -47,6 +47,13 @@ class KKamaraContactForm {
             10,
             3,
         );
+        // Save post
+        add_action(
+            "save_post",
+            array($this, "savePostOthersData"),
+            11,
+            3,
+        );
         // Create shortcode
         add_shortcode(
             "kkamara-contact-form",
@@ -180,6 +187,7 @@ class KKamaraContactForm {
      */
     public function editFormAfterTitleBody($post) {
         if ($post->post_type === "kkamara_contact") {
+            $post_id = $post->ID;
             // ob start
             ob_start();
             // Include the file
@@ -249,6 +257,10 @@ class KKamaraContactForm {
         if (!$title) {
             $title = "KKamara Contact Form";
         }
+        // Get the post ID
+        $postData = $this->getPostDataByGeneratedId($id);
+        // post id
+        $post_id = $postData->post_id;
         // Get the template
         ob_start();
         include_once KKAMARA_CONTACT_PLUGIN_DIR .
@@ -284,6 +296,26 @@ class KKamaraContactForm {
                     "generated_id" => $generated_id,
                 ]
             );
+        }
+    }
+
+    /**
+     * savePostOthersData
+     */
+    public function savePostOthersData($post_id, $post, $update) {
+        // Check if post type is kkamara_contact
+        if ($post->post_type === "kkamara_contact") {
+            // Check if post name kkamara-form-content
+            if (isset($_POST["kkamara-form-content"])) {
+                // Get the value
+                $kkamara_form_content = sanitize_text_field($_POST["kkamara-form-content"]);
+                // Update post meta
+                update_post_meta(
+                    $post_id,
+                    "kkamara-form-content",
+                    $kkamara_form_content,
+                );
+            }
         }
     }
 
@@ -330,6 +362,29 @@ class KKamaraContactForm {
         $sql = $wpdb->prepare(
             "SELECT * FROM $table WHERE post_id = %d",
             $post_id,
+        );
+        // Get results
+        $results = $wpdb->get_results($sql);
+        // Check if results
+        if ($results) {
+            return $results[0];
+        }
+        return false;
+    }
+
+    /**
+     * Get post data by generated ID
+     * @param int $generated_id,
+     * @return mixed|bool
+     */
+    public function getPostDataByGeneratedId($generated_id) {
+        global $wpdb;
+        // Table
+        $table = $wpdb->prefix."kkamara_contacts";
+        // SQL
+        $sql = $wpdb->prepare(
+            "SELECT * FROM $table WHERE generated_id = %d",
+            $generated_id,
         );
         // Get results
         $results = $wpdb->get_results($sql);
