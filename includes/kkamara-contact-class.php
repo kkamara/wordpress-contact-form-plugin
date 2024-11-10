@@ -307,7 +307,7 @@ class KKamaraContactForm {
             // Check if post name kkamara-form-content
             if (isset($_POST["kkamara-form-content"])) {
                 // Get the value
-                $kkamara_form_content = sanitize_text_field($_POST["kkamara-form-content"]);
+                $kkamara_form_content = sanitize_textarea_field($_POST["kkamara-form-content"]);
                 // Update post meta
                 update_post_meta(
                     $post_id,
