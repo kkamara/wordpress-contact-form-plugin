@@ -95,8 +95,7 @@ class KKamaraContactForm {
         foreach ($shortcodes as $shortcode => $callback) {
             // Add Shortcode
             add_shortcode(
-                KKAMARA_CONTACT_PLUGIN_SHORT_CODE_PREFIX .
-                    $shortcode,
+                KKAMARA_CONTACT_PLUGIN_SHORT_CODE_PREFIX.$shortcode,
                 array($this, $callback),
             );
         }
@@ -312,7 +311,7 @@ class KKamaraContactForm {
                 // Update post meta
                 update_post_meta(
                     $post_id,
-                    "kkamara-form-content",
+                    "kkamara_form_content",
                     $kkamara_form_content,
                 );
             }
@@ -383,7 +382,7 @@ class KKamaraContactForm {
         $table = $wpdb->prefix."kkamara_contacts";
         // SQL
         $sql = $wpdb->prepare(
-            "SELECT * FROM $table WHERE generated_id = %d",
+            "SELECT * FROM $table WHERE generated_id = %s",
             $generated_id,
         );
         // Get results
