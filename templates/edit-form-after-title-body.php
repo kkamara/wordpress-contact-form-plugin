@@ -20,6 +20,17 @@ if (!defined("ABSPATH") || !defined("WPINC")) {
         width: 100%;
         height: 300px;
     }
+    #kkamara-mail-body {
+        height: 300px;
+        width: 100%;
+    }
+    #kkamara-mail-additional-headers {
+        height: 70px;
+        width: 100%;
+    }
+    .kkamara-form input {
+        width: 100%;
+    }
 </style>
 <div class="kkamara-contact-tabs">
     <div id="kkamara-contact-tabs-content">
@@ -51,6 +62,85 @@ if (!defined("ABSPATH") || !defined("WPINC")) {
                 <br />
                 <code>[your-name] [your-email] [your-subject] [your-message]</code>
             </p>
+            <div class="kkamara-mail-settings">
+                <table class="form-table kkamara-form">
+                    <tr>
+                        <th>
+                            <label for="kkamara-mail-to">To:</label>
+                        </th>
+                        <td>
+                            <input
+                                type="text"
+                                class="regular-text"
+                                name="kkamara-mail-to"
+                                id="kkamara-mail-to"
+                                value="[_site_admin_mail]"
+                            >
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="kkamara-mail-from">From:</label>
+                        </th>
+                        <td>
+                            <input
+                                type="text"
+                                class="regular-text"
+                                name="kkamara-mail-from"
+                                id="kkamara-mail-from"
+                                value="[_site_title] <usermail@gmail.com>"
+                            >
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="kkamara-mail-subject">Subject:</label>
+                        </th>
+                        <td>
+                            <input
+                                type="text"
+                                class="regular-text"
+                                name="kkamara-mail-subject"
+                                id="kkamara-mail-subject"
+                                value="[_site_title] - [your-subject]"
+                            >
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="kkamara-mail-additional-headers">Additional Headers:</label>
+                        </th>
+                        <td>
+                            <textarea
+                                type="text"
+                                name="kkamara-mail-additional-headers"
+                                id="kkamara-mail-additional-headers"
+                                placeholder="Enter additional headers"
+                            >Reply-To: [your-email]</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="kkamara-mail-body">Message Body:</label>
+                        </th>
+                        <td>
+                            <textarea
+                                type="text"
+                                name="kkamara-mail-body"
+                                id="kkamara-mail-body"
+                                placeholder="Enter mail body"
+                            >From: [your-name] [your-email]
+Subject: [your-subject]
+
+Message Body:
+[your-message]
+
+--
+This is a notification that a contact form was submitted on your website ([_site_title] [_site_url]).</textarea>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
         <div id="tabs-messages">
             <p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
