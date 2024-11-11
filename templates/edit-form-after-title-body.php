@@ -3,6 +3,17 @@
 if (!defined("ABSPATH") || !defined("WPINC")) {
     exit("Do not access this file directly.");
 }
+
+// Get kkamara_form_fields
+$kkamara_form_fields = get_post_meta(
+    $post_id,
+    "kkamara_form_fields",
+    true,
+);
+// Log
+// error_log(
+//     "kkamara_form_fields:".print_r($kkamara_form_fields, true),
+// );
 ?>
 <style>
     .ui-state-active,
@@ -55,6 +66,13 @@ if (!defined("ABSPATH") || !defined("WPINC")) {
         </ul>
         <div id="tabs-form">
             <h3>Form</h3>
+            <code>
+                [kkamara_contact_subject]
+                [kkamara_contact_name]
+                [kkamara_contact_phone]
+                [kkamara_contact_email]
+                [kkamara_contact_message]
+            </code>
             <p>
                 You can edit the form template here.
             </p>
@@ -63,7 +81,7 @@ if (!defined("ABSPATH") || !defined("WPINC")) {
                     name="kkamara-form-content"
                     id="kkamara-form-content"
                     placeholder="Enter form content."
-                ><?php echo esc_html(get_post_meta($post_id, "kkamara_form_content", true)); ?></textarea>
+                ><?php echo esc_html($kkamara_form_fields["kkamara-form-content"]); ?></textarea>
             </div>
         </div>
         <div id="tabs-mail">
@@ -88,7 +106,7 @@ if (!defined("ABSPATH") || !defined("WPINC")) {
                                 class="regular-text"
                                 name="kkamara-mail-to"
                                 id="kkamara-mail-to"
-                                value="[_site_admin_mail]"
+                                value="<?php echo esc_html($kkamara_form_fields["kkamara-mail-to"]); ?>"
                             >
                         </td>
                     </tr>
@@ -102,7 +120,7 @@ if (!defined("ABSPATH") || !defined("WPINC")) {
                                 class="regular-text"
                                 name="kkamara-mail-from"
                                 id="kkamara-mail-from"
-                                value="[_site_title] <usermail@gmail.com>"
+                                value="<?php echo esc_html($kkamara_form_fields["kkamara-mail-from"]); ?>"
                             >
                         </td>
                     </tr>
@@ -116,7 +134,7 @@ if (!defined("ABSPATH") || !defined("WPINC")) {
                                 class="regular-text"
                                 name="kkamara-mail-subject"
                                 id="kkamara-mail-subject"
-                                value="[_site_title] - [your-subject]"
+                                value="<?php echo esc_html($kkamara_form_fields["kkamara-mail-subject"]); ?>"
                             >
                         </td>
                     </tr>
@@ -130,7 +148,7 @@ if (!defined("ABSPATH") || !defined("WPINC")) {
                                 name="kkamara-mail-additional-headers"
                                 id="kkamara-mail-additional-headers"
                                 placeholder="Enter additional headers"
-                            >Reply-To: [your-email]</textarea>
+                            ><?php echo esc_html($kkamara_form_fields["kkamara-mail-additional-headers"]); ?></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -143,14 +161,7 @@ if (!defined("ABSPATH") || !defined("WPINC")) {
                                 name="kkamara-mail-body"
                                 id="kkamara-mail-body"
                                 placeholder="Enter mail body"
-                            >From: [your-name] [your-email]
-Subject: [your-subject]
-
-Message Body:
-[your-message]
-
---
-This is a notification that a contact form was submitted on your website ([_site_title] [_site_url]).</textarea>
+                            ><?php echo esc_html($kkamara_form_fields["kkamara-mail-body"]); ?></textarea>
                         </td>
                     </tr>
                 </table>
@@ -168,6 +179,7 @@ This is a notification that a contact form was submitted on your website ([_site
                     name="kkamara-message-success"
                     id="kkamara-message-success"
                     placeholder="Enter success message"
+                    value="<?php echo esc_html($kkamara_form_fields["kkamara-message-success"]); ?>"
                 />
             </div>
             <div class="kkamara-contact-messages">
@@ -177,6 +189,7 @@ This is a notification that a contact form was submitted on your website ([_site
                     name="kkamara-message-error"
                     id="kkamara-message-error"
                     placeholder="Enter error message"
+                    value="<?php echo esc_html($kkamara_form_fields["kkamara-message-error"]); ?>"
                 />
             </div>
         </div>

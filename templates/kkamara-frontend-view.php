@@ -5,7 +5,11 @@ if (!defined("ABSPATH") || !defined("WPINC")) {
 }
 
 // Get contact body for $post_id
-$contact_body = get_post_meta($post_id, "kkamara_form_content", true);
+$contact_body = get_post_meta(
+    $post_id,
+    "kkamara_form_content",
+    true,
+);
 ?>
 <div class="kkamara-contact-form-frontend">
     <div class="kkamara-contact-header">

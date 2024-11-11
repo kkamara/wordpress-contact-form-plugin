@@ -321,17 +321,39 @@ class KKamaraContactForm {
     public function savePostOthersData($post_id, $post, $update) {
         // Check if post type is kkamara_contact
         if ($post->post_type === "kkamara_contact") {
-            // Check if post name kkamara-form-content
-            if (isset($_POST["kkamara-form-content"])) {
-                // Get the value
-                $kkamara_form_content = sanitize_textarea_field($_POST["kkamara-form-content"]);
-                // Update post meta
-                update_post_meta(
-                    $post_id,
-                    "kkamara_form_content",
-                    $kkamara_form_content,
-                );
+            // Collect all form fields
+            $form_fields = []; // Initialize the form_fields array
+            // Loop through $_POST
+            foreach($_POST as $key => $value) {
+                // If key is matching kkamara-
+                if (strpos($key, "kkamara-") !== false) {
+                    // Check if key is matching kkamara-form-content
+                    switch($key) {
+                        case "kkamara-form-content":
+                            // Pass the key to the form_fields array
+                            $form_fields[$key] = sanitize_textarea_field($value);
+                            break;
+                        case "kkamara-mail-additional-headers":
+                            // Pass the key to the form_fields array
+                            $form_fields[$key] = sanitize_textarea_field($value);
+                            break;
+                        case "kkamara-mail-body":
+                            // Pass the key to the form_fields array
+                            $form_fields[$key] = sanitize_textarea_field($value);
+                            break;
+                        default:
+                            // Add to form_fields
+                            $form_fields[$key] = sanitize_text_field($value);
+                            break;
+                    }
+                }
             }
+            // Update post meta
+            update_post_meta(
+                $post_id,
+                "kkamara_form_fields",
+                $form_fields,
+            );
         }
     }
 
