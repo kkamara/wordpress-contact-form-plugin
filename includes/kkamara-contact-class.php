@@ -90,6 +90,7 @@ class KKamaraContactForm {
             "phone" => "phoneShortCode",
             "email" => "emailShortCode",
             "message" => "messageShortCode",
+            "subject" => "subjectShortCode",
         ];
         // Loop through Shortcodes
         foreach ($shortcodes as $shortcode => $callback) {
@@ -162,6 +163,22 @@ class KKamaraContactForm {
                 rows="10"
                 placeholder="Enter your message"
             ></textarea>
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+
+    public function subjectShortCode($attr) {
+        ob_start();
+        ?>
+        <div class="kkamara-form-group">
+            <label for="message">Subject</label>
+            <input
+                type="text"
+                name="subject"
+                id="kkamara_subject"
+                placeholder="Enter your subject"
+            />
         </div>
         <?php
         return ob_get_clean();
