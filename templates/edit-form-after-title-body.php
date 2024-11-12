@@ -5,11 +5,7 @@ if (!defined("ABSPATH") || !defined("WPINC")) {
 }
 
 // Get kkamara_form_fields
-$kkamara_form_fields = get_post_meta(
-    $post_id,
-    "kkamara_form_fields",
-    true,
-);
+$kkamara_form_fields = get_kkamara_post_fields($post_id);
 // Log
 // error_log(
 //     "kkamara_form_fields:".print_r($kkamara_form_fields, true),

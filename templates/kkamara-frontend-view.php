@@ -4,12 +4,10 @@ if (!defined("ABSPATH") || !defined("WPINC")) {
     exit("Do not access this file directly.");
 }
 
-// Get contact body for $post_id
-$contact_body = get_post_meta(
-    $post_id,
-    "kkamara_form_content",
-    true,
-);
+// Get form fields
+$form_fields = get_kkamara_post_fields($post_id);
+// Get contact body
+$contact_body = $form_fields["kkamara-form-content"];
 ?>
 <style>
     .kkamara-form-message-error {
@@ -45,6 +43,11 @@ $contact_body = get_post_meta(
                 type="hidden"
                 name="nonce"
                 value="<?php echo wp_create_nonce("kkamara-contact-message"); ?>"
+            />
+            <input
+                type="hidden"
+                name="kkamara-post-id"
+                value="<?php echo esc_attr($post_id); ?>"
             />
             <?php
                 // Get the shortcode regex

@@ -11,6 +11,28 @@ if (!defined("ABSPATH") || !defined("WPINC")) {
  * @since 1.0.0
  */
 class KKamaraContactForm {
+    /**
+     * KKamara Contact Form instance
+     * @var KKamaraContactForm
+     */
+    private static $instance;
+
+    /**
+     * Get KKamaraContactForm instance
+     * @return KKamaraContactForm
+     */
+    public static function getInstance() {
+        // Check if instance is null
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        // Return instance
+        return self::$instance;
+    }
+
+    /**
+     * Constructor
+     */
     public function __construct() {
         // Init the plugin
         // Add action init
@@ -106,14 +128,17 @@ class KKamaraContactForm {
             $kkamara_email = sanitize_text_field($_POST["kkamara-email"]);
             $kkamara_phone = sanitize_text_field($_POST["kkamara-phone"]);
             $kkamara_message = sanitize_textarea_field($_POST["kkamara-message"]);
+            // Get the post id
+            $post_id = sanitize_text_field($_POST["kkamara-post-id"]);
 
             // Format the message
-            $message = $this->kkamaraMessageFormatter([
+            $message = $this->kkamaraMessageFormat([
                 "subject" => $kkamara_subject,
                 "name" => $kkamara_name,
                 "email" => $kkamara_email,
                 "phone" => $kkamara_phone,
                 "message" => $kkamara_message,
+                "post_id" => $post_id,
             ]);
         } catch (\Exception $e) {
             // Log to debug
@@ -132,11 +157,65 @@ class KKamaraContactForm {
      * @param array $args
      * @return string
      */
-    public function kkamaraMessageFormatter($args): string {
+    public function kkamaraMessageFormat($args): string {
         // Extract
         extract($args); // Create variables from the array
-        // TODO: format the message.
-        return $message;
+        // Get saved form fields
+        $form_fields = $this->getKKamaraFormFields($post_id);
+        return "";
+    }
+
+    /**
+     * Get the form fields
+     * @param int $post_id
+     */
+    public function getKKamaraFormFields($post_id): array {
+        // Create default array
+        $kkamara_default_array = [
+            "kkamara-form-content" => "[kkamara_contact_subject]
+
+[kkamara_contact_name]
+
+[kkamara_contact_phone]
+
+[kkamara_contact_email]
+
+[kkamara_contact_message]",
+            "kkamara-mail-to" => "[_site_admin_mail]",
+            "kkamara-mail-from" => "[_site_title]",
+            "kkamara-mail-subject" => "[_site_title] - [your-subject]",
+            "kkamara-mail-additional-headers" => "Reply-To: [your-email]",
+            "kkamara-mail-body" => "From: [your-name] [your-email]
+Subject: [your-subject]
+
+Message Body:
+[your-message]
+
+--
+This is a notification that a contact form was submitted on your website ([_site_title] [_site_url]).",
+            "kkamara-message-success" => "Message sent!",
+            "kkamara-message-error" => "Something went wrong.",
+        ];
+
+        try {
+            // Get saved form fields
+            $form_fields = get_post_meta(
+                $post_id,
+                "kkamara_form_fields",
+                true,
+            );
+            // Check if form fields is empty, if empty return default form fields
+            if (empty($form_fields)) {
+                // Return default form fields
+                return $kkamara_default_array;
+            }
+            // Return form fields
+            return $form_fields;
+        } catch (\Exception $e) {
+            // Log to debug
+            error_log("KKamara contact error: ".$e->getMessage());
+            return [];
+        }
     }
 
     /**
