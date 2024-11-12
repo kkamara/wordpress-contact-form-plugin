@@ -45,7 +45,8 @@ define(
 if (!defined("KKamaraContactForm")) {
     // Include the class file
     include_once KKAMARA_CONTACT_PLUGIN_DIR."/includes/kkamara-contact-class.php";
-
+    // Create an instance
+    new KKamaraContactForm();
     // Include helper file
     include_once KKAMARA_CONTACT_PLUGIN_DIR."/includes/helper.php";
 }
