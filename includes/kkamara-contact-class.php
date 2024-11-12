@@ -116,6 +116,7 @@ class KKamaraContactForm {
      */
     public function kkamaraSendMessage() {
         try {
+            error_log(1);
             // Get the nonce data
             if (!wp_verify_nonce($_POST["nonce"], "kkamara-contact-message")) {
                 wp_send_json_error([
@@ -162,6 +163,38 @@ class KKamaraContactForm {
         extract($args); // Create variables from the array
         // Get saved form fields
         $form_fields = $this->getKKamaraFormFields($post_id);
+        // Site title
+        $site_title = get_option("blogname");
+        // Site URL
+        $site_url = site_url();
+        // Admin email
+        $admin_email = get_option("admin_email");
+
+        // Prepare replacements
+        $replacements = [
+            "[your-subject]" => $subject,
+            "[your-name]" => $name,
+            "[your-email]" => $email,
+            "[your-phone]" => $phone,
+            "[your-message]" => $message,
+            "[_site_title]" => $site_title,
+            "[_site_url]" => $site_url,
+            "[_site_admin_email]" => $admin_email,
+        ];
+
+        // Loop through form fields
+        foreach($form_fields as $key => $value) {
+            // Skip if key match kkamara-form-content
+            if ($key === "kkamara-form-content") {
+                continue; // Skip
+            }
+            // Replace the value
+            $form_fields[$key] = strtr($value, $replacements);
+        }
+
+        // Send mail
+
+        // Return message
         return "";
     }
 
