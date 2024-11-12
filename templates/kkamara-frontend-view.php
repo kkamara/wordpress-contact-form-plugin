@@ -83,7 +83,7 @@ $contact_body = $form_fields["kkamara-form-content"];
 </div>
 <script>
     jQuery(document).ready(function ($) {
-        $("kkamara-contact-form-submit").on("submit", function(e) {
+        $("#kkamara-contact-form-submit").on("submit", function(e) {
             e.preventDefault();
             var form = $(this);
             var data = form.serialize();
@@ -107,12 +107,12 @@ $contact_body = $form_fields["kkamara-form-content"];
                         form[0].reset();
                         // Show success message
                         form.find("#kkamara-form-message").html(
-                            "<p class='kkamara-form-message-success'>"+response.message+"</p>"
+                            "<p class='kkamara-form-message-success'>"+response.data.message+"</p>"
                         );
                     } else {
                         // Show error message
                         form.find("#kkamara-form-message").html(
-                            "<p class='kkamara-form-message-error'>"+response.message+"</p>"
+                            "<p class='kkamara-form-message-error'>"+response.data.message+"</p>"
                         );
                     }
                     // Restore the button

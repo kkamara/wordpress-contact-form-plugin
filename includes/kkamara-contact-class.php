@@ -116,7 +116,6 @@ class KKamaraContactForm {
      */
     public function kkamaraSendMessage() {
         try {
-            error_log(1);
             // Get the nonce data
             if (!wp_verify_nonce($_POST["nonce"], "kkamara-contact-message")) {
                 wp_send_json_error([
@@ -133,7 +132,7 @@ class KKamaraContactForm {
             $post_id = sanitize_text_field($_POST["kkamara-post-id"]);
 
             // Format the message
-            $message = $this->kkamaraMessageFormat([
+            $response = $this->kkamaraMessageFormat([
                 "subject" => $kkamara_subject,
                 "name" => $kkamara_name,
                 "email" => $kkamara_email,
@@ -141,6 +140,16 @@ class KKamaraContactForm {
                 "message" => $kkamara_message,
                 "post_id" => $post_id,
             ]);
+
+            if ($response["response"]) {
+                wp_send_json_success([
+                    "message" => $response["form_fields"]["kkamara-message-success"],
+                ]);
+            } else {
+                wp_send_json_error([
+                    "message" => $response["form_fields"]["kkamara-message-error"],
+                ]);
+            }
         } catch (\Exception $e) {
             // Log to debug
             $errorMessage = $e->getMessage();
@@ -156,46 +165,59 @@ class KKamaraContactForm {
     /**
      * KKamara Message Formatter
      * @param array $args
-     * @return string
+     * @return array
      */
-    public function kkamaraMessageFormat($args): string {
-        // Extract
-        extract($args); // Create variables from the array
-        // Get saved form fields
-        $form_fields = $this->getKKamaraFormFields($post_id);
-        // Site title
-        $site_title = get_option("blogname");
-        // Site URL
-        $site_url = site_url();
-        // Admin email
-        $admin_email = get_option("admin_email");
+    public function kkamaraMessageFormat($args): array {
+        try {
+            // Extract
+            extract($args); // Create variables from the array
+            // Get saved form fields
+            $form_fields = $this->getKKamaraFormFields($post_id);
+            // Site title
+            $site_title = get_option("blogname");
+            // Site URL
+            $site_url = site_url();
+            // Admin email
+            $admin_email = get_option("admin_email");
 
-        // Prepare replacements
-        $replacements = [
-            "[your-subject]" => $subject,
-            "[your-name]" => $name,
-            "[your-email]" => $email,
-            "[your-phone]" => $phone,
-            "[your-message]" => $message,
-            "[_site_title]" => $site_title,
-            "[_site_url]" => $site_url,
-            "[_site_admin_email]" => $admin_email,
-        ];
+            // Prepare replacements
+            $replacements = [
+                "[your-subject]" => $subject,
+                "[your-name]" => $name,
+                "[your-email]" => $email,
+                "[your-phone]" => $phone,
+                "[your-message]" => $message,
+                "[_site_title]" => $site_title,
+                "[_site_url]" => $site_url,
+                "[_site_admin_email]" => $admin_email,
+            ];
 
-        // Loop through form fields
-        foreach($form_fields as $key => $value) {
-            // Skip if key match kkamara-form-content
-            if ($key === "kkamara-form-content") {
-                continue; // Skip
+            // Loop through form fields
+            foreach($form_fields as $key => $value) {
+                // Skip if key match kkamara-form-content
+                if ($key === "kkamara-form-content") {
+                    continue; // Skip
+                }
+                // Replace the value
+                $form_fields[$key] = strtr($value, $replacements);
             }
-            // Replace the value
-            $form_fields[$key] = strtr($value, $replacements);
+
+            // Send mail
+            $response = wp_mail(
+                $form_fields["kkamara-mail-to"],
+                $form_fields["kkamara-mail-subject"],
+                $form_fields["kkamara-mail-body"],
+                $form_fields["kkamara-mail-additional-headers"],
+            );
+
+            // Return message
+            return [
+                "response" => $response,
+                "form_fields" => $form_fields,
+            ];
+        } catch (\Exception $e) {
+            throw $e;
         }
-
-        // Send mail
-
-        // Return message
-        return "";
     }
 
     /**
