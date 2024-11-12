@@ -78,6 +78,65 @@ class KKamaraContactForm {
         );
         // Add multiple shortcodes
         $this->addMultipleShortcodes();
+        // Add Ajax kkamara_send_message
+        add_action(
+            "wp_ajax_kkamara_send_message",
+            array($this, "kkamaraSendMessage"),
+        ); // Send with user login
+        add_action(
+            "wp_ajax_nopriv_kkamara_send_message",
+            array($this, "kkamaraSendMessage"),
+        ); // Send without user login
+    }
+
+    /**
+     * kkamaraSendMessage
+     */
+    public function kkamaraSendMessage() {
+        try {
+            // Get the nonce data
+            if (!wp_verify_nonce($_POST["nonce"], "kkamara-contact-message")) {
+                wp_send_json_error([
+                    "message" => "Invalid nonce, please reload the page.",
+                ]);
+            }
+            // Get the form field
+            $kkamara_subject = sanitize_text_field($_POST["kkamara-subject"]);
+            $kkamara_name = sanitize_text_field($_POST["kkamara-name"]);
+            $kkamara_email = sanitize_text_field($_POST["kkamara-email"]);
+            $kkamara_phone = sanitize_text_field($_POST["kkamara-phone"]);
+            $kkamara_message = sanitize_textarea_field($_POST["kkamara-message"]);
+
+            // Format the message
+            $message = $this->kkamaraMessageFormatter([
+                "subject" => $kkamara_subject,
+                "name" => $kkamara_name,
+                "email" => $kkamara_email,
+                "phone" => $kkamara_phone,
+                "message" => $kkamara_message,
+            ]);
+        } catch (\Exception $e) {
+            // Log to debug
+            $errorMessage = $e->getMessage();
+            error_log(
+                "KKamara contact error: ".$errorMessage,
+            );
+            wp_send_json_error([
+                "message" => "Something went wrong: ".$errorMessage,
+            ]);
+        }
+    }
+
+    /**
+     * KKamara Message Formatter
+     * @param array $args
+     * @return string
+     */
+    public function kkamaraMessageFormatter($args): string {
+        // Extract
+        extract($args); // Create variables from the array
+        // TODO: format the message.
+        return $message;
     }
 
     /**
@@ -109,7 +168,7 @@ class KKamaraContactForm {
             <label for="name">Name</label>
             <input
                 type="text"
-                name="name"
+                name="kkamara-name"
                 id="kkamara_name"
                 placeholder="Enter your name"
             />
@@ -125,7 +184,7 @@ class KKamaraContactForm {
             <label for="phone">Phone Number</label>
             <input
                 type="text"
-                name="phone"
+                name="kkamara-phone"
                 id="kkamara_phone"
                 placeholder="Enter your phone number"
             />
@@ -141,7 +200,7 @@ class KKamaraContactForm {
             <label for="email">Email</label>
             <input
                 type="text"
-                name="email"
+                name="kkamara-email"
                 id="kkamara_email"
                 placeholder="Enter your email"
             />
@@ -157,7 +216,7 @@ class KKamaraContactForm {
             <label for="message">Message</label>
             <textarea
                 type="text"
-                name="message"
+                name="kkamara-message"
                 id="kkamara_email"
                 cols="30"
                 rows="10"
@@ -175,7 +234,7 @@ class KKamaraContactForm {
             <label for="message">Subject</label>
             <input
                 type="text"
-                name="subject"
+                name="kkamara-subject"
                 id="kkamara_subject"
                 placeholder="Enter your subject"
             />

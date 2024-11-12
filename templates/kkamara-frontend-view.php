@@ -11,6 +11,20 @@ $contact_body = get_post_meta(
     true,
 );
 ?>
+<style>
+    .kkamara-form-message-error {
+        color: red;
+        border: 1px solid red;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .kkamara-form-message-success {
+        color: green;
+        border: 1px solid green;
+        padding: 10px;
+        border-radius: 5px;
+    }
+</style>
 <div class="kkamara-contact-form-frontend">
     <div class="kkamara-contact-header">
         <h3>
@@ -56,6 +70,65 @@ $contact_body = get_post_meta(
                     Submit
                 </button>
             </div>
+            <div class="kkamara-form-group">
+                <div class="kkamara-form-message">
+                    <p id="kkamara-form-message"></p>
+                </div>
+            </div>
         </form>
     </div>
 </div>
+<script>
+    jQuery(document).ready(function ($) {
+        $("kkamara-contact-form-submit").on("submit", function(e) {
+            e.preventDefault();
+            var form = $(this);
+            var data = form.serialize();
+            console.log(data);
+            // Send Ajax
+            $.ajax({
+                type: "POST",
+                url: "<?php echo admin_url("admin-ajax.php") ?>",
+                data: data,
+                dataType: "json",
+                beforeSend: function (response) {
+                    var submitButton = form.find("button[type='submit']");
+                    submitButton.prop("disabled", true);
+                    // Change the button text
+                    submitButton.text("Sending...");
+                },
+                success: function (response) {
+                    console.log(response);
+                    if (response.success) {
+                        // Reset the form
+                        form[0].reset();
+                        // Show success message
+                        form.find("#kkamara-form-message").html(
+                            "<p class='kkamara-form-message-success'>"+response.message+"</p>"
+                        );
+                    } else {
+                        // Show error message
+                        form.find("#kkamara-form-message").html(
+                            "<p class='kkamara-form-message-error'>"+response.message+"</p>"
+                        );
+                    }
+                    // Restore the button
+                    var submitButton = form.find("button[type='submit']");
+                    submitButton.prop("disabled", false);
+                    submitButton.text("Submit");
+                },
+                error: function(response) {
+                    console.log(response);
+                    // Show error message
+                    form.find("#kkamara-form-message").html(
+                        "<p class='kkamara-form-message-error'>Something went wrong.</p>"
+                    );
+                    // Restore the button
+                    var submitButton = form.find("button[type='submit']");
+                    submitButton.prop("disabled", false);
+                    submitButton.text("Submit");
+                },
+            });
+        });
+    });
+</script>
