@@ -1,6 +1,6 @@
-<img src="https://github.com/kkamara/useful/blob/main/php-reactjs-boilerplate.png?raw=true" alt="php-reactjs-boilerplate.png" width=""/>
+<img src="https://github.com/kkamara/useful/raw/main/php-react-boilerplate.png" alt="php-react-boilerplate.png" width=""/>
 
-<img src="https://github.com/kkamara/useful/blob/main/php-reactjs-boilerplate2.png?raw=true" alt="php-reactjs-boilerplate2.png" width=""/>
+<img src="https://github.com/kkamara/useful/raw/main/php-react-boilerplate2.png" alt="php-react-boilerplate2.png" width=""/>
 
 # WordPress Contact Form Plugin
 
